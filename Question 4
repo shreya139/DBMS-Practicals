@@ -1,0 +1,70 @@
+mysql> create database employee_details;
+mysql> use employee_details;
+  
+   mysql> create table employee(
+    -> Person_name char(20) primary key,
+    -> Street char(30) not null,
+    -> City char(20) not null);
+
+   mysql> create table company(
+    -> Company_Name varchar(50) Primary key,
+    -> City char(20));
+
+   mysql> create table works(
+    -> Person_Name char(20),
+    -> Company_Name varchar(50),
+    -> Salary decimal(10,2),
+    -> foreign key(Person_Name) references EMPLOYEE(Person_Name),
+    -> foreign key(Company_Name) references COMPANY(Company_Name));
+
+   mysql> Create table MANAGES(
+    -> Person_Name char(20),
+    -> Manager_Name char(20),
+    -> foreign key(Person_Name) references EMPLOYEE(Person_Name));
+    
+                   
+    mysql> insert into EMPLOYEE values("Shreya","10/11 A Block","Meerut");
+    mysql> insert into EMPLOYEE values("Saumya","125 A Block","Delhi");
+    mysql> insert into EMPLOYEE values("Arsh","300 D Block","Gurgaon");
+    mysql> insert into EMPLOYEE values("Tarushi","367B Sector 25","Noida");
+    mysql> insert into EMPLOYEE values("Priya","674 B Block","Ghaziabad");
+    
+    mysql> insert into COMPANY values("NCB Bank","Delhi");
+    mysql> insert into COMPANY values("Samba Bank","Gurgaon");
+    mysql> insert into COMPANY values("Axis Bank","Noida");
+    mysql> insert into COMPANY values("SBI bank","Lucknow");
+    mysql> insert into COMPANY values("IDBI Bank","Ghaziabad");
+    
+    mysql> insert into WORKS values("Shreya","IDBI Bank",18000);
+    mysql> insert into WORKS values("Saumya","Samba Bank",10000);
+    mysql> insert into WORKS values("Arsh","NCB Bank",10000);
+    mysql> insert into WORKS values("Tarushi","Samba Bank",20000);
+    mysql> insert into WORKS values("Priya","Axis Bank",5000);
+    
+    mysql> insert into MANAGES values("Shreya","Rajeev Verma");
+    mysql> insert into MANAGES values("Saumya","Ajay Yadav");
+    mysql> insert into MANAGES values("Arsh","Y.K Sharma");
+    mysql> insert into MANAGES values("Tarushi","Dhruv Kumar");
+    mysql> insert into MANAGES values("Priya","Kavya Gupta");
+    
+    
+    
+(a) Primary Key: Name in table EMPLOYEE
+                 Name in table COMPANY
+    Foreign Key: Person_Name in table WORKS
+                 Company_Name in table WORKS
+                 Person_Name in table MANAGES
+                 
+(b) mysql> alter table EMPLOYEE add column Email varchar(20);
+
+(c) mysql> select distinct(Manager_Name) from MANAGES as m, WORKS as w where m.Person_Name=w.Person_Name and (w.Company_Name="Samba Bank" or w.Company_Name="NCB Bank");
+
+(d) mysql> select e.Person_Name, e.Street, e.City, w.Salary from EMPLOYEE as e, WORKS as w where e.Person_Name=w.Person_Name and w.Company_Name="Samba Bank" and w.Salary>10000;
+
+(e) mysql> select e.Person_Name from EMPLOYEE as e, WORKS as w, COMPANY as c where e.Person_Name=w.Person_Name and e.City=c.City and w.Company_Name=c.Company_Name;
+
+(f) mysql> select Company_Name, max(Salary), min(Salary), avg(Salary) from WORKS group by Company_Name;
+
+(g) mysql> select Company_Name, sum(Salary), count(Company_Name) as "number of employees" from WORKS group by Company_Name;
+
+(h) mysql> select Company_Name,max(Salary) from WORKS;
