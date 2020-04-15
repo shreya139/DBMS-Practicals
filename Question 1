@@ -1,0 +1,34 @@
+mysql> create database du_lib;
+mysql> use du_lib;
+mysql> create table LibraryBooks(AccNo decimal(10,5) primary key, Title varchar(60) not null, Author varchar(60) not null, Dept varchar(30) not null, PurchaseDate date not null, Price decimal(6,2) not null);
+mysql> create table IssuedBooks(AccNo decimal(10,5) not null, Borrower varchar(30) not null, foreign key (AccNo) references LibraryBooks(AccNo));
+
+(a) Primary Key: AccNo in table LibraryBooks
+    Foreign Key: AccNo in table IssuedBooks
+
+    mysql> insert into LibraryBooks values(11.326, "Discrete Maths", "S. Verma", "Mathematics", '1996-12-06', 400.00);
+    mysql> insert into LibraryBooks values(13.76, "Database System Concepts", "Korth", "CS", '2001-08-16', 620.00);
+    mysql> insert into LibraryBooks values(13.432, "Introduction to DBMS", "Navathe", "CS", '2003-02-24', 350.00);
+    mysql> insert into LibraryBooks values(12.873,"Introduction to Matrices","S.C. Gupta","Statistics",'1999-01-12', 105.00);
+    mysql> insert into LibraryBooks values(12.45,"Fundamental of Statistics","V.K. Kapoor","Statistics",'2005/03/31',550.00);
+
+    mysql> insert into IssuedBooks values(13.432, "Shreya Arora");
+    mysql> insert into IssuedBooks values(12.873, "Parth Sharma");
+    mysql> insert into IssuedBooks values(11.326, "Riddhi Gupta");
+    mysql> insert into IssuedBooks values(11.326, "Vineet Garg");
+    mysql> insert into IssuedBooks values(13.76, "Sunidhi");
+
+(b)	mysql> set foreign_key_checks=off;
+    mysql> delete from issuedbooks where accno=13.76;
+    mysql> delete from librarybooks where title="Database System Concepts";
+    mysql> set foreign_key_checks=On;
+
+(c) mysql> update LibraryBooks set dept="CS" where title="Discrete Maths";
+
+(d)	mysql> select title from LibraryBooks where dept="CS";
+
+(e)	mysql> select title from LibraryBooks where dept="CS" and author="Navathe";
+
+(f)	mysql> select title from LibraryBooks lb, IssuedBooks ib where lb.accno=ib.accno and lb.dept="CS";
+
+(g)	mysql> select title from LibraryBooks where price<500 or purchasedate between '1999/01/01' and '2004/01/01';
