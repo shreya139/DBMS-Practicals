@@ -1,0 +1,43 @@
+mysql> create database CSDept;
+mysql> use csdept;
+
+mysql> create table stu_info(RollNo int(10) primary key, name varchar(40) not null, DOB date not null, address varchar(100) not null, marks int(3) not null, phone varchar(10) not null);
+mysql> create table paper_details(code int(4) primary key, name varchar(20) unique);
+mysql> create table academic_details(
+    -> rollno int(10) primary key,
+    -> papercode int(4) not null,
+    -> attendance int(3) not null,
+    -> marks int(3) not null,
+    -> foreign key(rollno) references stu_info(rollno),
+    -> foreign key(papercode) references paper_details(code));
+    
+(a) Primary Key: Rollno in table stu_info
+                 code in table paper_details
+    Foreign key: Rollno in table academic_details
+                 Papercode in table Academic_Details
+    
+    mysql> insert into stu_info values(1201,"Aastika",'2001-11-09',"Delhi",81,9645721775);
+    mysql> insert into stu_info values(1202,"Amit",'2001-01-19',"Delhi",88,9645721776);
+    mysql> insert into stu_info values(1203,"Surya",'2000-11-23',"Kolkata",94,9645721777);
+    mysql> insert into stu_info values(1204,"Tanmay",'2000-05-03',"Meerut",96,9645721778);
+    mysql> insert into stu_info values(1205,"Yashika",'2000-09-13',"Mumbai",86,9645721790);
+    
+    mysql> insert into paper_details values(1,"English");
+    mysql> insert into paper_details values(2,"Desc Stats");
+    mysql> insert into paper_details values(3,"Calculus");
+    mysql> insert into paper_details values(4,"Python");
+    mysql> insert into paper_details values(5,"DBMS");
+    
+    mysql> insert into academic_details values(1201,2,68,79);
+    mysql> insert into academic_details values(1202,3,88,90);
+    mysql> insert into academic_details values(1203,1,78,85);
+    mysql> insert into academic_details values(1204,2,74,93);
+    mysql> insert into academic_details values(1205,4,91,94);
+    
+(b) mysql> select pd.code, pd.name, si.name from paper_details pd, stu_info si where pd.code=2 and si.rollno in(select rollno from academic_details where papercode=2 and attendance>75 and marks>60);
+
+(c) mysql> select name from stu_info si, academic_details ad where si.rollno=ad.rollno and ad.marks>60 and ad.papercode=1 and si.Address="Delhi";
+
+(d) mysql> select si.name, ad.attendance, ad.marks from stu_info si, academic_details as ad where si.rollno=ad.rollno;
+
+(e) mysql> select name from stu_info si, academic_details ad where si.rollno=ad.rollno and si.rollno=(select rollno from academic_details where marks=(select max(marks) from academic_details));
