@@ -1,0 +1,85 @@
+mysql> create database Product;
+mysql> use Product;
+
+mysql> create table Suppliers(
+    -> Sno int(10) primary key,
+    -> Sname varchar(20) not null,
+    -> Status int(20) not null,
+    -> Scity char(20) not null);
+
+mysql> create table Parts(
+    -> PNo int(8) primary key,
+    -> Pname varchar(20) not null,
+    -> Colour varchar(10) not null,
+    -> Weight int(4) not null,
+    -> City char(20) not null);
+
+mysql> create table Project(
+    -> Jno int(10) Primary key,
+    -> Jname char(20) not null,
+    -> Jcity char(20) not null);
+
+mysql> create table  Shipment(
+    -> Sno varchar(20) not null,
+    -> Pno int(10) not null,
+    -> Jno int(10) not null,
+    -> Quantity int(8) not null,
+    -> foreign key(Sno) references Suppliers(Sno),
+    -> foreign key(Pno) references Parts(Pno),
+    -> Foreign key(Jno) references Project(Jno));
+    
+mysql> insert into Suppliers values(111,"S1",35,"London");
+mysql> insert into Suppliers values(112,"S2",27,"Paris");
+mysql> insert into Suppliers values(113,"S1",39,"Paris");
+mysql> insert into Suppliers values(114,"S2",85,"Los Angeles");
+mysql> insert into Suppliers values(112,"S3",63,"New York");
+
+mysql> insert into Parts values(1001,"P1","Blue",12,"London");
+mysql> insert into Parts values(1002,"P2","Yellow",35,"Paris");
+mysql> insert into Parts values(1003,"P2","Green",23,"London");
+mysql> insert into Parts values(1003,"P3","Grey",31,"Singapore");
+mysql> insert into Parts values(1005,"P1","Black",50,"Tokyo");
+
+mysql> insert into Project values(5901,"J1","New York");
+mysql> insert into Project values(5902,"J2","New York");
+mysql> insert into Project values(5903,"J3","London");
+mysql> insert into Project values(5904,"J4","Singapore");
+mysql> insert into Project values(5905,"J1","Tokyo");
+
+mysql> insert into Shipment values(111,1004,5902,30);
+mysql> insert into Shipment values(113,1005,5903,150);
+mysql> insert into Shipment values(115,1002,5903,450);
+mysql> insert into Shipment values(111,1003,5901,300);
+mysql> insert into Shipment values(112,1001,5905,650);
+mysql> insert into Shipment values(111,1001,5902,50);
+
+(a) Primary Key: Sno in table Suppliers
+                  Pno in table Parts
+                  Jno in table Project
+
+    Foreign Key- Sno in table Shipment
+                  Pno in table Shipment
+                  Jno in table Shipment
+
+(b) mysql> select Sno from Suppliers where Scity="Paris" and Status>20;
+
+(c) mysql> Select * from Suppliers where Sno in(select Sno from Shipment where Pno in(select Pno from Parts where Pname="P2")) Order by Sno;
+
+(d) mysql> Select Sname from Suppliers where Sno in(Select distinct sno from Shipment where Pno in(select Pno from parts where Pname!="P2"));
+
+(e) mysql> select s.Sno, s.Pno, s.Jno, s.Quantity, s.Quantity*p.Weight as "Total_shipment_weight" from Shipment as s, Parts as p where s.Pno=p.Pno;
+
+(f) mysql> Select * from Shipment where Quantity between 300 and 750;
+
+(g) mysql> select Pno from Parts where Weight>16 or Pno in(select Pno from Shipment where Sno in(select s.Sno from Shipment as s, Suppliers as sup where s.Sno=sup.Sno and sup.Sname="S2"));
+
+(h) mysql> select City from Parts where Colour="Red" and Pno in(select Pno from Shipment where Quantity>5);
+
+(i) mysql> select * from Parts where Pno in(select Pno from Shipment where Sno in(select Sno from Suppliers where Scity="London"));
+
+(j) mysql> select Pno from Shipment where Sno in(select Sno from Suppliers where Scity="London") and Jno in(Select Jno from Project where Jcity="London");
+
+(k) mysql> select count(distinct(Jno)) as "No. of Project Supplied by supplier S1" from Shipment where Sno in(select Sno from Suppliers where Sname="S1");
+
+(l) mysql> select count(*) from Parts where Pno in(Select Pno from Shipment where Sno in(select Sno from Suppliers where Sname ="S1")) and Pname="P1";
+
