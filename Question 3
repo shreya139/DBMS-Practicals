@@ -43,8 +43,8 @@ mysql> create table service(
     
     mysql> insert into bicyclemodel values("R867","Honda","Scooty");
     mysql> insert into bicyclemodel values("C101","Hero","Bike");
-    mysql> insert into bicyclemodel values("T601","Honda","Car");
-    mysql> insert into bicyclemodel values("T201","Hyundai","Car");
+    mysql> insert into bicyclemodel values("T601","Honda","Scooter");
+    mysql> insert into bicyclemodel values("T201","Hyundai","Bike");
     mysql> insert into bicyclemodel values("R701","TVS","Scooty");
     
     mysql> insert into bicycle values("B501",'2019-02-05',"Red","1102","T601");
